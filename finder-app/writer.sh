@@ -1,27 +1,23 @@
-#!/bin/bash
-
-# Check if the correct number of arguments is provided
 if [ $# -ne 2 ]; then
-  echo "Error: Two arguments are required."
-  echo "Usage: $0 <writefile> <writestr>"
-  exit 1
+	echo Please provide 2 arguments writefile and writestr.
+	exit 1
 fi
 
-# Assign arguments to variables
 writefile=$1
 writestr=$2
 
-# Extract the directory path from writefile
-directory=$(dirname "$writefile")
-
-# Create the directory if it does not exist
-mkdir -p "$directory"
-
-# Try to write the string to the file
-if echo "$writestr" > "$writefile"; then
-  echo "File created successfully at $writefile"
-else
-  echo "Error: Could not create the file at $writefile"
-  exit 1
+dir=$(dirname $writefile)
+if [ ! -d $dir ]; then
+	mkdir -p $dir
+	if [ $? -ne 0 ]; then
+		echo "Huy Error: Cannot create directory $dir"
+		exit 1
+	fi
 fi
 
+echo "$writestr" > $writefile
+
+if [ $? -ne 0 ]; then
+	echo Error: Cannot create or write to $writefile.
+	exit 1
+fi
